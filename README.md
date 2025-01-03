@@ -1,3 +1,3 @@
-# simple-form-validation
+# Form Validation
 
-https://yasincoder1.github.io/simple-form-validation/
+https://yasincoder0x0.github.io/simple-form-validation/
