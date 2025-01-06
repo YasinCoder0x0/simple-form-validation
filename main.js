@@ -1,60 +1,73 @@
-/*Getting username and passwords elements*/
-const username = document.getElementById("username");
+/* Getting email and password elements */
+const email = document.getElementById("email");
 const password = document.getElementById("password");
-const password2 = document.getElementById("password2");
+const confirmPassword = document.getElementById("confirm-password");
 
-
-/*Function that takes two arguments, to throw an error messege if user did not type the required input. */
+/* Function to show error message */
 const showError = (input, message) => {
   const formControl = input.parentElement;
   formControl.className = "form-control error";
-  let small = formControl.querySelector("small");
+  const small = formControl.querySelector("small");
   small.innerText = message;
   small.style.visibility = "visible";
-}
+};
 
-/*Function that takes one argument, to let the user pass the Authentication when everything is fine. */
+/* Function to show success */
 const showSuccess = (input) => {
   const formControl = input.parentElement;
   formControl.className = "form-control success";
-  let small = formControl.querySelector("small");
+  const small = formControl.querySelector("small");
   small.style.visibility = "hidden";
-}
+};
 
+/* Check email validity */
+const checkEmail = () => {
+  const emailValue = email.value.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+  if (emailValue === "") {
+    showError(email, "Email is required");
+  } else if (!emailRegex.test(emailValue)) {
+    showError(email, "Please enter a valid email address");
+  } else {
+    showSuccess(email);
+  }
+};
 
-const checkUsername = () => {
-  username.value === "" ? 
-  showError(username, "Username is required") : showSuccess(username);
-}
-
+/* Check password validity */
 const checkPassword = () => {
-  let passLength = password.value.split("");
-  if (password.value === "") {
+  const passwordValue = password.value;
+  const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*?])[A-Za-z\d!@#$%^&*?]{8,}$/;
+
+  if (passwordValue === "") {
     showError(password, "Password is required");
-  } else if (passLength.length < 8) {
-    showError(password, "Passwords must be more than 8");
+  } else if (!passwordRegex.test(passwordValue)) {
+    showError(
+      password,
+      "Password must be at least 8 characters long and include at least one number, one uppercase letter, one lowercase letter, and one special character"
+    );
   } else {
     showSuccess(password);
   }
-}
+};
 
+/* Check confirm password validity */
 const checkConfirmPassword = () => {
-  password2.value === "" ? 
-  showError(password2, "Please confirm the password") : showSuccess(password2);
-}
+  if (confirmPassword.value === "") {
+    showError(confirmPassword, "Confirm password is required");
+  } else if (confirmPassword.value !== password.value) {
+    showError(confirmPassword, "Passwords do not match");
+  } else {
+    showSuccess(confirmPassword);
+  }
+};
 
-const checkPasswordsMatch = () => {
-  password.value !== password2.value ?
-  showError(password2, "Passwords do not match") : null;
-}
-
+/* Form submission handling */
 const form = document.getElementById("form");
 
 form.addEventListener("submit", (e) => {
-  e.preventDefault(); //this prevent the default submit behaviour
-  checkUsername();
+  e.preventDefault(); // Prevent the default submit behavior
+  checkEmail();
   checkPassword();
   checkConfirmPassword();
-  checkPasswordsMatch();
 });
